@@ -142,8 +142,8 @@
             const tapSpeed = now - lastTapTime;
             lastTapTime = now;
 
-            // Check for suspiciously fast tapping (speed detection)
-            if (tapSpeed < 500) {  // Increased threshold to allow human-like taps
+            // Check for suspiciously fast tapping (speed detection) - Set to 100ms
+            if (tapSpeed < 100) {  // 100ms threshold for fast tapping
                 showPopup("You're tapping too fast! Slow down.");
                 return;
             }

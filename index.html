@@ -35,7 +35,7 @@
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s;
-            opacity: 1;
+            opacity: 0.5; /* Initially disabled */
         }
 
         #tap-button:hover {
@@ -110,6 +110,40 @@
         let lastTapTime = Date.now(); // Initialize last tap time correctly
         const encryptedCode = "ZTh0V2d6MkpvVk5Z"; // Base64 encoded version of "e8tWgz2JoVNY"
         let isPaused = false; // Track if the game is paused due to popup
+
+        // Deployment timestamp (set to the exact deployment time in UTC)
+        const deploymentTime = new Date("2025-01-19T00:00:00Z"); // Adjusted to Jan 19, 2025, 00:00 UTC
+        const delayDuration = 60 * 60 * 1000; // 1 hour in milliseconds
+        const countdownDisplay = document.createElement('div');
+
+        // Add countdown display to the page
+        countdownDisplay.style.marginTop = "20px";
+        countdownDisplay.style.fontSize = "18px";
+        countdownDisplay.style.color = "yellow";
+        document.body.insertBefore(countdownDisplay, tapButton.nextSibling);
+
+        // Function to calculate remaining time
+        const updateCountdown = () => {
+            const now = new Date();
+            const timeElapsed = now - deploymentTime;
+            const timeRemaining = delayDuration - timeElapsed;
+
+            if (timeRemaining <= 0) {
+                tapButton.disabled = false;
+                tapButton.style.opacity = 1; // Fully visible
+                countdownDisplay.textContent = "Tap button is now active!";
+            } else {
+                tapButton.disabled = true;
+                tapButton.style.opacity = 0.5; // Semi-transparent
+                const minutes = Math.floor(timeRemaining / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                countdownDisplay.textContent = `Time remaining: ${minutes}m ${seconds}s`;
+            }
+        };
+
+        // Run countdown on page load and periodically
+        updateCountdown();
+        setInterval(updateCountdown, 1000); // Update every second
 
         // Decode the secret code from Base64
         const decodeSecretCode = (encodedCode) => atob(encodedCode);

@@ -111,9 +111,8 @@
         const encryptedCode = "ZTh0V2d6MkpvVk5Z"; // Base64 encoded version of "e8tWgz2JoVNY"
         let isPaused = false; // Track if the game is paused due to popup
 
-        // Deployment timestamp (set to the exact deployment time in UTC)
-        const deploymentTime = new Date("2025-01-19T00:00:00Z"); // Adjusted to Jan 19, 2025, 00:00 UTC
-        const delayDuration = 60 * 60 * 1000; // 1 hour in milliseconds
+        // Indianapolis, Indiana target time (Jan 19, 2025, 00:00 EST)
+        const targetDateIndianapolis = new Date("2025-01-19T00:00:00-05:00"); // UTC-5
         const countdownDisplay = document.createElement('div');
 
         // Add countdown display to the page
@@ -125,8 +124,7 @@
         // Function to calculate remaining time
         const updateCountdown = () => {
             const now = new Date();
-            const timeElapsed = now - deploymentTime;
-            const timeRemaining = delayDuration - timeElapsed;
+            const timeRemaining = targetDateIndianapolis - now; // Calculate remaining time until target time in Indianapolis time
 
             if (timeRemaining <= 0) {
                 tapButton.disabled = false;

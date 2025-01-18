@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Tap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://i.ibb.co/gV63YjH/Background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        #tap-button {
+            width: 150px;
+            height: 150px;
+            background: url('https://i.ibb.co/NnPgLsJ/Moons.png') no-repeat center center;
+            background-size: cover;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            opacity: 1; /* Fully enabled for testing */
+        }
+
+        #tap-button:hover {
+            transform: scale(1.1);
+        }
+
+        #counter {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        #popup-message {
+            margin-top: 20px;
+            font-size: 18px;
+            display: none;
+        }
+
+        #secret-code {
+            margin-top: 30px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #32cd32;
+            display: none;
+        }
+
+        #telegram-link {
+            margin-top: 30px;
+            font-size: 18px;
+            text-decoration: none;
+            color: #00bfff;
+            font-weight: bold;
+        }
+
+        #telegram-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Turtle Tap</h1>
+    <button id="tap-button"></button>
+    <div id="counter">0 / 2500</div>
+    <div id="popup-message"></div>
+    <div id="secret-code">Secret Code: </div>
+
+    <!-- Telegram link -->
+    <a id="telegram-link" href="https://t.me/+O8YUYgrRhF0xZDNh" target="_blank">Join us on Telegram!</a>
+
+    <script>
+        const tapButton = document.getElementById('tap-button');
+        const counter = document.getElementById('counter');
+        const secretCode = document.getElementById('secret-code');
+
+        let tapCount = 0;
+        const encryptedCode = "ZTh0V2d6MkpvVk5Z"; // Base64 encoded version of "e8tWgz2JoVNY"
+
+        // Decode the secret code from Base64
+        const decodeSecretCode = (encodedCode) => atob(encodedCode);
+
+        // Function to update the counter display
+        const updateCounter = () => {
+            counter.textContent = `${tapCount} / 2500`;
+        };
+
+        // Event listener for the tap button
+        tapButton.addEventListener('click', () => {
+            tapCount++;
+            updateCounter();
+
+            if (tapCount >= 2500) {
+                tapButton.style.display = 'none';
+                const decodedCode = decodeSecretCode(encryptedCode);
+                secretCode.textContent = `Secret Code: ${decodedCode}`;
+                secretCode.style.display = 'block';
+            }
+        });
+
+        updateCounter();
+    </script>
+</body>
+</html>

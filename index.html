@@ -35,7 +35,7 @@
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s;
-            opacity: 1; /* Fully enabled for testing */
+            opacity: 1; /* Fully enabled */
         }
 
         #tap-button:hover {
@@ -61,6 +61,17 @@
             display: none;
         }
 
+        #resume-button {
+            width: 150px;
+            height: 150px;
+            background: url('https://i.ibb.co/b1mBHmW/Screenshot-20250117-003541-Messenger.png') no-repeat center center;
+            background-size: cover;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none; /* Initially hidden */
+        }
+
         #telegram-link {
             margin-top: 30px;
             font-size: 18px;
@@ -82,6 +93,9 @@
     <div id="popup-message"></div>
     <div id="secret-code">Secret Code: </div>
 
+    <!-- Resume Button -->
+    <button id="resume-button"></button>
+
     <!-- Telegram link -->
     <a id="telegram-link" href="https://t.me/+O8YUYgrRhF0xZDNh" target="_blank">Join us on Telegram!</a>
 
@@ -89,9 +103,12 @@
         const tapButton = document.getElementById('tap-button');
         const counter = document.getElementById('counter');
         const secretCode = document.getElementById('secret-code');
+        const resumeButton = document.getElementById('resume-button');
+        const popupMessage = document.getElementById('popup-message');
 
         let tapCount = 0;
         const encryptedCode = "ZTh0V2d6MkpvVk5Z"; // Base64 encoded version of "e8tWgz2JoVNY"
+        let isPaused = false; // Track if the game is paused due to popup
 
         // Decode the secret code from Base64
         const decodeSecretCode = (encodedCode) => atob(encodedCode);
@@ -101,11 +118,45 @@
             counter.textContent = `${tapCount} / 2500`;
         };
 
+        // Function to show the popup
+        const showPopup = (message) => {
+            popupMessage.textContent = message;
+            popupMessage.style.display = 'block';
+            resumeButton.style.display = 'block';
+            isPaused = true;
+        };
+
+        // Function to resume the game
+        const resumeGame = () => {
+            popupMessage.style.display = 'none';
+            resumeButton.style.display = 'none';
+            isPaused = false;
+        };
+
         // Event listener for the tap button
         tapButton.addEventListener('click', () => {
+            if (isPaused) return; // Prevent counting when paused
+
+            const now = Date.now();
+            const tapSpeed = now - lastTapTime;
+            lastTapTime = now;
+
+            // Check for suspiciously fast tapping (speed detection)
+            if (tapSpeed < 500) {  // Increased threshold to allow human-like taps
+                showPopup("You're tapping too fast! Slow down.");
+                return;
+            }
+
             tapCount++;
             updateCounter();
 
+            // Show popup every 500 taps to encourage the user
+            if (tapCount % 500 === 0 && tapCount < 2500) {
+                showPopup("You're doing great! Keep going!");
+                return;
+            }
+
+            // Check for win condition (2500 taps)
             if (tapCount >= 2500) {
                 tapButton.style.display = 'none';
                 const decodedCode = decodeSecretCode(encryptedCode);
@@ -114,6 +165,12 @@
             }
         });
 
+        // Event listener for the resume button
+        resumeButton.addEventListener('click', () => {
+            resumeGame();
+        });
+
+        // Initialize
         updateCounter();
     </script>
 </body>

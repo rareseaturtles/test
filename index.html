@@ -35,7 +35,7 @@
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s;
-            opacity: 1; /* Fully enabled */
+            opacity: 1;
         }
 
         #tap-button:hover {
@@ -69,7 +69,7 @@
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            display: none; /* Initially hidden */
+            display: none;
         }
 
         #telegram-link {
@@ -107,6 +107,7 @@
         const popupMessage = document.getElementById('popup-message');
 
         let tapCount = 0;
+        let lastTapTime = Date.now(); // Initialize last tap time correctly
         const encryptedCode = "ZTh0V2d6MkpvVk5Z"; // Base64 encoded version of "e8tWgz2JoVNY"
         let isPaused = false; // Track if the game is paused due to popup
 
